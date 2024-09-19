@@ -11,14 +11,27 @@ import java.util.List;
 public class StockService {
     private List<Product> products = new ArrayList<>();
     private List<Subscriber> subscribers = new ArrayList<>();
-    public void addProduct(Product product){
-        this.products.add(product);
+    @Autowired
+    public  StockService(SubscriberLog log, SubscriberWarning warning){
+        this.subscribers.add(log);
+        this.subscribers.add(warning);
     }
-    public void modifyStock(String idProduct, Integer newQuant){
-        Product product = this.products.stream().filter(p-> p.getId().equals(idProduct)).findFirst().orElseThrow(() -> new IllegalArgumentException("Product does not exist"));
-        product.setQuantity(newQuant);
-        for(Subscriber sub: subscribers){
-            sub.notifyChange(product.getName(),newQuant);
+    public Boolean addProduct(Product product){
+
+        if(this.products.stream().anyMatch(p-> p.getId().equals(product.getId())))return false;
+        if(product.getQuantity()<0 || product.getPrice()<0)return false;
+        this.products.add(product);
+        return true;
+    }
+    public Boolean modifyStock(String idProduct, Integer newQuant){
+        if(!products.stream().anyMatch(p->p.getId().equals(idProduct)) || newQuant<0) return false;
+        else{
+            Product product = this.products.stream().filter(p-> p.getId().equals(idProduct)).findFirst().orElse(new Product());
+            product.setQuantity(newQuant);
+            for(Subscriber sub: subscribers){
+                sub.notifyChange(product.getName(),newQuant);
+            }
         }
+        return true;
     }
 }

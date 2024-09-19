@@ -21,10 +21,16 @@ public class Product {
     public void setPrice(Integer price){
         this.price = price;
     }
+    public Integer getPrice(){
+        return this.price;
+    }
     public void setCategory(String category){
         this.category = category;
     }
     public void setQuantity(Integer quantity){
         this.quantity = quantity;
+    }
+    public Integer getQuantity(){
+        return this.quantity;
     }
 }
