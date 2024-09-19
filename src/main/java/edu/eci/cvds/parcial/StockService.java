@@ -24,6 +24,9 @@ public class StockService {
         return true;
     }
     public Boolean modifyStock(String idProduct, Integer newQuant){
+        for (Subscriber sub:subscribers){
+            sub.setNotified(false);
+        }
         if(!products.stream().anyMatch(p->p.getId().equals(idProduct)) || newQuant<0) return false;
         else{
             Product product = this.products.stream().filter(p-> p.getId().equals(idProduct)).findFirst().orElse(new Product());
@@ -33,5 +36,8 @@ public class StockService {
             }
         }
         return true;
+    }
+    public List<Subscriber> getSubscribers(){
+        return this.subscribers;
     }
 }

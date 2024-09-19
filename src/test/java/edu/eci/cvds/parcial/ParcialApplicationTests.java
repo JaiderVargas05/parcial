@@ -60,7 +60,7 @@ class ParcialApplicationTests {
 		product1.setPrice(1200);
 		product1.setQuantity(100);
 		this.st.addProduct(product1);
-		assertTrue(st.modifyStock("1",99));
+		assertTrue(st.modifyStock("1",4));
 
 	}
 	@Test
@@ -77,6 +77,20 @@ class ParcialApplicationTests {
 		product1.setQuantity(100);
 		this.st.addProduct(product1);
 		assertFalse(st.modifyStock("1",-99));
+	}
+	@Test
+	void modifyStock_shouldNotifySubscribers(){
+		Product product1 = new Product();
+		product1.setId("1");
+		product1.setName("Xbox");
+		product1.setCategory("Console");
+		product1.setPrice(1200);
+		product1.setQuantity(100);
+		this.st.addProduct(product1);
+		st.modifyStock("1",99);
+		for(Subscriber sub : st.getSubscribers()){
+			assertTrue(sub.wasNotified());
+		}
 	}
 
 }

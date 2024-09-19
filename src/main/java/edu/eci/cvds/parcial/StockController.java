@@ -1,5 +1,5 @@
 package edu.eci.cvds.parcial;
-
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ public class StockController {
     private StockService stockService;
 
 
-    @PostMapping ("addProduct")
+    @PostMapping (value = "addProduct", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void addProduct(@RequestBody Product product) {
         stockService.addProduct(product);
     }
